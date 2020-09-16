@@ -1,0 +1,44 @@
+#define KEY_F1 0x05
+#define KEY_F2 0x06
+#define KEY_F3 0x04
+#define KEY_F4 0x0C
+#define KEY_F5 0x03
+#define KEY_F6 0x0B
+#define KEY_F7 0x83
+#define KEY_F8 0x0A
+#define KEY_F9 0x01
+#define KEY_F10 0x09
+#define KEY_F11 0x78
+#define KEY_F12 0x07
+#define KEY_NUM_0 0x45
+#define KEY_NUM_1 0x16
+#define KEY_NUM_2 0x1E
+#define KEY_NUM_3 0x26
+#define KEY_NUM_4 0x25
+#define KEY_NUM_5 0x2E
+#define KEY_NUM_6 0x36
+#define KEY_NUM_7 0x3D
+#define KEY_NUM_8 0x3E
+#define KEY_NUM_9 0x46
+//#define KEY_F12 0x07
+//#define KEY_ESC 0x76
+//#define KEY_HOME 0xE06C
+//#define KEY_END 0xE069
+//#define KEY_PAGE_UP 0xE07D
+//#define KEY_PAGE_DOWN 0xE07A
+//#define KEY_PAUSE 0xE11477E1F014E077
+//#define KEY_ALT_GR 0x11
+
+#define KEY_CURSOR_LEFT 0x6B
+#define KEY_CURSOR_DOWN 0x72
+#define KEY_CURSOR_RIGHT 0x74
+#define KEY_CURSOR_UP 0x75
+#define KEY_ENTER 0x5A
+#define KEY_A 0x1C
+#define KEY_Z 0x1A
+#define KEY_SPACE 0x29
+#define KEY_MINUS 0x7B
+#define KEY_PLUS 0x79
+#define KEY_ASTERISK 0x7C
+
+
