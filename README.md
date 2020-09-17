@@ -21,8 +21,8 @@ https://github.com/rpsubc8/esp32gameboy/blob/master/arduino/hex/hex.zip
 
 Example:
 
-<code>
+<p>
 f:\Users\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.exe --chip esp32 --port COM44 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 f:\Users\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/partitions/boot_app0.bin 0x1000 f:\Users\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.4/tools/sdk/bin/bootloader_qio_80m.bin 0x10000 v:\Temp\arduino_build_211050/gameboy.ino.bin 0x8000 v:\Temp\arduino_build_211050/gameboy.ino.partitions.bin 
-</code>
+</p>
 
 The directories should be replaced by ours, as well as the COM port and speed.
