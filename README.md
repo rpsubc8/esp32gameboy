@@ -14,6 +14,15 @@ Gameboy emulate ESP32
  <li>Libreria Bitluini ESP32lib 0.3.3</li>
 </ul>
 
+<pre>
+ #define lib_compile_fabgl
+ //#define lib_compile_vga32
+ 
+ //user_min_ram - min ram consume, not bank cache
+ #define use_max_ram
+</pre>
+
+We have to comment and decomment the library options we want to use, as well as the RAM consumption.
 
 A version is available and it can be climbed with the esptools of the Arduino:
 
