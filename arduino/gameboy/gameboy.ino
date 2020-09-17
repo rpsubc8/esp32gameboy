@@ -106,7 +106,9 @@ unsigned char gb_silence=0;
  void ShowOptionsVGA32(void); 
 #endif
 
-unsigned char* gb_bank_switch_array[maxBankSwitch]; //Cache de 4 y 8 bancos
+#ifdef use_max_ram
+ unsigned char* gb_bank_switch_array[maxBankSwitch]; //Cache de 4 y 8 bancos
+#endif 
 
 unsigned char* gb_ptrMem_raw=NULL; //La dire de Mem
 unsigned char* gb_video_buffer_gb;//puntero a la pantalla video gameboy
@@ -214,7 +216,8 @@ void InitGB()
  //int r = rom_init((unsigned char *)gb_rom_contra);
  //sdl_init(); No se necesita
  //printf("ROM OK!\n");     
- int r = rom_init(gb_roms_data[0]);
+ //int r = rom_init(gb_roms_data[0]);
+ rom_init(gb_roms_data[0]);
  lcdAssignSDLFrameBuffer();
  MemAssignROMPtrMemory();
  mem_init();
@@ -242,9 +245,11 @@ void setup()
  printf("HEAP BEGIN %d\n", gb_free_ram_boot);  
  printf("HEAP malloc %d\n", ESP.getFreeHeap());
 
- for (unsigned char i=0;i<maxBankSwitch;i++)
-  gb_bank_switch_array[i] = (unsigned char *)malloc(0x4000);  
- MemPreparaBankSwitchPtr(gb_bank_switch_array);
+ #ifdef use_max_ram
+  for (unsigned char i=0;i<maxBankSwitch;i++)
+   gb_bank_switch_array[i] = (unsigned char *)malloc(0x4000);  
+  MemPreparaBankSwitchPtr(gb_bank_switch_array);
+ #endif 
 
  InitGB();
  printf("HEAP InitGB %d\n", ESP.getFreeHeap());
@@ -908,26 +913,24 @@ void loop()
   //case 1: rom_init(gb_rom_bomberman); break;
   //case 2: rom_init(gb_rom_contra); break;
   //case 0: rom_init(gb_rom_mario); break;
-  /*case 1: rom_init(gb_rom_tetris); break;
-  case 2: rom_init(gb_rom_Asteroids); break;
-  case 3: rom_init(gb_rom_AstroRabby); break;
-  case 4: rom_init(gb_rom_pacman); break;
-  case 5: rom_init(gb_rom_spiderman); break;
-  case 6: rom_init(gb_rom_loopz); break;
-  case 7: rom_init(gb_rom_BotBInvite); break;
-  case 8: rom_init(gb_rom_wobbly); break;
-  case 9: rom_init(gb_rom_naavis); break;
-  */
-  /*case 0: rom_init(gb_rom_batman); break;
-  case 1: rom_init(gb_rom_lionking); break;
-  case 2: rom_init(gb_rom_contra); break;
-  /*case 3: rom_init(gb_rom_bomberman); break;
-  case 4: rom_init(gb_rom_donkeykong); break;
-  case 5: rom_init(gb_rom_hoshi); break;
-  case 6: rom_init(gb_rom_metroid); break;
-  case 7: rom_init(gb_rom_mortal); break;
+  //case 1: rom_init(gb_rom_tetris); break;
+  //case 2: rom_init(gb_rom_Asteroids); break;
+  //case 3: rom_init(gb_rom_AstroRabby); break;
+  //case 4: rom_init(gb_rom_pacman); break;
+  //case 5: rom_init(gb_rom_spiderman); break;
+  //case 6: rom_init(gb_rom_loopz); break;
+  //case 7: rom_init(gb_rom_BotBInvite); break;
+  //case 8: rom_init(gb_rom_wobbly); break;
+  //case 9: rom_init(gb_rom_naavis); break;  
+  //case 0: rom_init(gb_rom_batman); break;
+  //case 1: rom_init(gb_rom_lionking); break;
+  //case 2: rom_init(gb_rom_contra); break;*/
+  //case 3: rom_init(gb_rom_bomberman); break;
+  //case 4: rom_init(gb_rom_donkeykong); break;
+  //case 5: rom_init(gb_rom_hoshi); break;
+  //case 6: rom_init(gb_rom_metroid); break;
+  //case 7: rom_init(gb_rom_mortal); break;
   //case 8: rom_init(gb_rom_prince); break;
-  //case 9: rom_init(gb_rom_wario); break;  
-  */
+  //case 9: rom_init(gb_rom_wario); break;    
   //default: break;
  //}

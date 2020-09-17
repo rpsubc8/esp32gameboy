@@ -18,10 +18,11 @@ static int joypad_select_buttons, joypad_select_directions;
 static unsigned short int gb_mem_bank_switch_prev=0;
 const unsigned char *ptr_rom_getbytes=NULL; //Puntero a la ROM para switch
 
-static unsigned char cont_bank_switch_cur = 0;
-static unsigned short int cache_bank_switch_number[maxBankSwitch];
-
-static unsigned char * cache_bank_switch_data[maxBankSwitch];
+#ifdef use_max_ram
+ static unsigned char cont_bank_switch_cur = 0;
+ static unsigned short int cache_bank_switch_number[maxBankSwitch];
+ static unsigned char * cache_bank_switch_data[maxBankSwitch];
+#endif 
 
 //static unsigned int gbContROM = 0;
 
@@ -87,23 +88,25 @@ void MemAssignPtrMem(unsigned char *ptr)
  mem = ptr;
 }
 
-//*****************************************
-void MEMResetBankSwithBuffers()
-{
- cont_bank_switch_cur =0;
- for (unsigned char i=0;i<maxBankSwitch;i++)
+#ifdef use_max_ram
+ //*****************************************
+ void MEMResetBankSwithBuffers()
  {
-  cache_bank_switch_number[i]=0;  
-  //memset(cache_bank_switch_data[i],0,0x4000);
- }
-}
+  cont_bank_switch_cur =0;
+  for (unsigned char i=0;i<maxBankSwitch;i++)
+  {
+   cache_bank_switch_number[i]=0;  
+   //memset(cache_bank_switch_data[i],0,0x4000);
+  }
+ } 
 
-//********************************************************
-void MemPreparaBankSwitchPtr(unsigned char **ptr)
-{
- for (unsigned char i=0;i<maxBankSwitch;i++)
-  cache_bank_switch_data[i] = ptr[i];
-}
+ //********************************************************
+ void MemPreparaBankSwitchPtr(unsigned char **ptr)
+ {
+  for (unsigned char i=0;i<maxBankSwitch;i++)
+   cache_bank_switch_data[i] = ptr[i];
+ }
+#endif
 
 //********************************************************
 unsigned char * MemGetAddressMem()
@@ -117,45 +120,47 @@ void MemAssignROMPtrMemory()
  ptr_rom_getbytes= rom_getbytes();
 }
 
-//********************************************************
-char SearchBank(unsigned short int aBank)
-{
- char aReturn;
- for (unsigned char i=0;i<maxBankSwitch;i++)
+#ifdef use_max_ram
+ //********************************************************
+ char SearchBank(unsigned short int aBank)
  {
-  if (cache_bank_switch_number[i] == aBank)
-   return i;
- }
+  unsigned char aReturn;
+  for (unsigned char i=0;i<maxBankSwitch;i++)
+  {
+   if (cache_bank_switch_number[i] == aBank)
+    return i;
+  }
  
- //No se ha encontrado,lo metemos
- aReturn = cont_bank_switch_cur;
- cache_bank_switch_number[cont_bank_switch_cur++]= aBank;
- memcpy (cache_bank_switch_data[aReturn],&ptr_rom_getbytes[aBank * 0x4000],0x4000);
- //cont_bank_switch_len = cont_bank_switch_len & 0x03; //8 elementos circular
- //if (cont_bank_switch_len>3)
- // cont_bank_switch_len=3;
- //if (cont_bank_switch_len>7) //con vga32lib
- // cont_bank_switch_len=7;
- #ifdef lib_compile_fabgl
-  cont_bank_switch_cur = cont_bank_switch_cur & 0x03;
- #endif
- #ifdef lib_compile_vga32
-  cont_bank_switch_cur = cont_bank_switch_cur & 0x07;  
- #endif
- return aReturn;
-}
+  //No se ha encontrado,lo metemos
+  aReturn = cont_bank_switch_cur;
+  cache_bank_switch_number[cont_bank_switch_cur++]= aBank;
+  memcpy (cache_bank_switch_data[aReturn],&ptr_rom_getbytes[aBank * 0x4000],0x4000); 
+  #ifdef lib_compile_fabgl
+   cont_bank_switch_cur = cont_bank_switch_cur & 0x03;
+  #endif
+  #ifdef lib_compile_vga32
+   cont_bank_switch_cur = cont_bank_switch_cur & 0x07;  
+  #endif
+  return aReturn;
+ }
+#endif
 
 //************************************************
 void mem_bank_switch(unsigned short int n)
 {//Tarda entre 432 y 656 micros paso a 44 microsegundos con cache bancos
- char aSearch;
+ unsigned char aSearch;
  //unsigned long time_prev;
  if (n != gb_mem_bank_switch_prev)
  {  
   gb_mem_bank_switch_prev= n; 
   //time_prev = micros();
-  aSearch = SearchBank(n);
-  memcpy (&mem[0x4000],cache_bank_switch_data[aSearch],0x4000);    
+  #ifdef use_max_ram
+   aSearch = SearchBank(n);
+   memcpy (&mem[0x4000],cache_bank_switch_data[aSearch],0x4000);    
+  #endif
+  #ifdef use_min_ram
+   memcpy(&mem[0x4000], &ptr_rom_getbytes[n * 0x4000], 0x4000);
+  #endif
   //memcpy (&mem[0x4000],&ptr_rom_getbytes[n * 0x4000],0x4000);
   //time_prev = micros()-time_prev;
   //printf("Tiempo %d\n",time_prev);    
@@ -345,7 +350,9 @@ void mem_write_word(unsigned short d, unsigned short i)
 void mem_init(void)
 {
 	const unsigned char *bytes = rom_getbytes();
-  MEMResetBankSwithBuffers();
+  #ifdef use_max_ram
+   MEMResetBankSwithBuffers();
+  #endif
 
 	//mem = (unsigned char *)calloc(1, 0x10000);
   memset(mem,1,0x10000); //La reinicio

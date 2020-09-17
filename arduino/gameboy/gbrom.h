@@ -1,4 +1,3 @@
-//Tetris
 #ifndef GB_ROM_H
  #define GB_ROM_H 
 
@@ -46,26 +45,24 @@
  
  //#include "gbRomMario.h"
  //#include "gbRomTetris.h"
- /*#include "gbRomAsteroids.h"
- #include "gbRomAstroRabby.h"
- #include "gbRomPacman.h"
- #include "gbRomSpiderman.h"
- #include "gbRomLoopz.h"
- #include "gbRomBotBInvite.h"
- #include "gbRomWobbly.h"
- #include "gbRomNaavis.h"*/
-
+ //#include "gbRomAsteroids.h"
+ //#include "gbRomAstroRabby.h"
+ //#include "gbRomPacman.h"
+ //#include "gbRomSpiderman.h"
+ //#include "gbRomLoopz.h"
+ //#include "gbRomBotBInvite.h"
+ //#include "gbRomWobbly.h"
+ //#include "gbRomNaavis.h"
  //#include "gbRomBatman.h"
- /*#include "gbRomLionking.h"*/
- //#include "gbRomContra.h" 
- //#include "gbRomBomberman.h" 
- /*#include "gbRomDonkeykong.h" 
- #include "gbRomHoshi.h" 
- #include "gbRomMetroid.h" 
- #include "gbRomMortal3.h" 
+ //#include "gbRomLionking.h"
+ //#include "gbRomContra.h"
+ //#include "gbRomBomberman.h"
+ //#include "gbRomDonkeykong.h"
+ //#include "gbRomHoshi.h"
+ //#include "gbRomMetroid.h" 
+ //#include "gbRomMortal3.h" 
  //#include "gbRomPrince.h" 
- //#include "gbRomWario.h" 
- */
+ //#include "gbRomWario.h"  
  //const int gb_rom_size=65537;
 
 #endif

@@ -10,7 +10,7 @@ static int lcd_line;
 
 static unsigned char * ptr_sdl_framebuffer=NULL;
 static unsigned short int * gb_pre_y_scanline; //precalculos cada linea 144 lineas
-//const unsigned char kk[40] PROGMEM ={
+//const unsigned char prueba[40] PROGMEM ={
 // 0   , 160, 320, 480, 640, 800, 960,1120,1280,1440,
 // 1600,1760,1920,1080,2240,2400,1560,2720,2880,3040,
 // 3200,3360,3520,3680,3840,4000,4160,4320,4480,4640,
@@ -191,7 +191,10 @@ void drawColorIndexToFrameBuffer(byte x, byte y, byte idx)
 {
   //unsigned short int offset = x + y * 160;
   //b[offset >> 2] |= (idx << ((offset & 3) << 1));
-  unsigned short int offset= gb_pre_y_scanline[y]+x;
+  unsigned short int offset;
+  if (y>143)
+   return;
+  offset= gb_pre_y_scanline[y]+x;
   ptr_sdl_framebuffer[offset]= (~idx&0x03); //aplicamos negativo
 }
 
@@ -299,6 +302,8 @@ static void draw_sprites(int line, int nsprites)
 			{
 				//unsigned int temp = b[line*640+(x + s[i].x)];
         //unsigned int temp = ptr_sdl_framebuffer[line*160+(x + sSprite[i].x)];
+        if ((line<0)||(line>143))
+         break;
         unsigned int temp = ptr_sdl_framebuffer[gb_pre_y_scanline[line]+(x + sSprite[i].x)];
 				if(temp != colours[bgpalette[0]])
 					continue;

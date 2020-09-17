@@ -20,7 +20,9 @@ static unsigned char *mem; //memoria al principio
 //void MEMUpload(unsigned char *auxBuf, int auxLen);
 //void mem_initWIFI(void);
 void MemAssignPtrMem(unsigned char *);
-void MemPreparaBankSwitchPtr(unsigned char **ptr);
+#ifdef use_max_ram
+ void MemPreparaBankSwitchPtr(unsigned char **ptr);
+#endif 
 unsigned char * MemGetAddressMem(void);
 void MemAssignROMPtrMemory(void);
 void mem_init(void);

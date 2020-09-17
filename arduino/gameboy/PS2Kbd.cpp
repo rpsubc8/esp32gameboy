@@ -1,7 +1,7 @@
 #include <Arduino.h>
+#include "gbConfig.h"
 
-#define KEYBOARD_DATA 32
-#define KEYBOARD_CLK 33
+#ifdef lib_compile_vga32
 
 unsigned int shift = 0;
 byte lastcode = 0;
@@ -92,3 +92,5 @@ boolean checkKey(uint8_t scancode) {
         return true;
     return false;
 }
+
+#endif
