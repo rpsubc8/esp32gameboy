@@ -35,3 +35,13 @@ f:\Users\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.e
 </pre>
 
 The directories should be replaced by ours, as well as the COM port and speed.
+
+Tool to generate struct 10 roms .h:
+
+https://github.com/rpsubc8/esp32gameboy/tree/master/arduino/tools
+
+The roms .gb must be introduced in the directory rom, and when launching:
+<pre>
+ rom2h roms
+</pre>
+All the .h that we must drop in the project will be generated.
