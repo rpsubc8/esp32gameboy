@@ -1,7 +1,7 @@
 # ESP32 Gameboy
 
 <center><img src="https://github.com/rpsubc8/esp32gameboy/blob/master/preview/preview.jpg"></center>
-Emulador de Gameboy
+Emulador de Gameboy para la placa TTGO VGA32 con chip ESP32.
 <ul>
  <li><b>fabgl:</b> sonido, vga, teclado y 4 bancos de cache</li>
  <li><b>vga32:</b> vga, teclado y 8 bancos de cache</li>
