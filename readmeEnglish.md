@@ -1,6 +1,6 @@
 # ESP32 Gameboy
 <center><img src="https://github.com/rpsubc8/esp32gameboy/blob/master/preview/preview.jpg"></center>
-Gameboy emulate ESP32
+Gameboy emulate ESP32 TTGO VGA32 board.
 <ul>
  <li><b>fabgl:</b> sound, vga, keyboard and 4 bank cache</li>
  <li><b>vga32:</b> vga, keyboard and 8 bank cache</li>
