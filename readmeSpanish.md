@@ -39,7 +39,7 @@ f:\Users\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.e
 Los directorios deben ser reemplazadados por los nuestros, así como el puerto COM y la velocidad del mismo.
 
 
-<h1>Generar .h</h>
+<h1>Generar .h</h1>
 He creado una tool para generar la estructura de las 10 roms .h:
 
 https://github.com/rpsubc8/esp32gameboy/tree/master/arduino/tools
@@ -48,4 +48,4 @@ Los archivos roms .gb deben ser introducidos en el directorio rom, and se debe l
 <pre>
  rom2h roms
 </pre>
-Todos los .h que se genera, deben ser soltados al proyecto, sobreescribiendo los actuales.
+Todos los .h que se generan, deben ser soltados al proyecto, sobreescribiendo los actuales.
