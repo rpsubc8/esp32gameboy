@@ -38,7 +38,19 @@ f:\Users\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.e
 
 Los directorios deben ser reemplazadados por los nuestros, así como el puerto COM y la velocidad del mismo.
 
+<br>
+<h1>Arduino IDE</h1>
+Todo el proyecto es compatible con la estructura de Arduino 1.8.11.
+<center><img src='https://raw.githubusercontent.com/rpsubc8/ESP32TinyZXSpectrum/main/preview/previewArduinoIDEpreferences.gif'></center>
+Debemos instalar las extensiones de spressif en el gestor de urls adicionales de tarjetas <b>https://dl.espressif.com/dl/package_esp32_index.json</b>
+<center><img src='https://raw.githubusercontent.com/rpsubc8/ESP32TinyZXSpectrum/main/preview/previewArduinoIDElibrary.gif'></center>
+Necesitamos las librerias de <b>bitluni 0.3.3</b> y <b>fabgl 0.9.0</b>.
+Lo podemos hacer desde el administrador de bibliotecas.
+Debemos desactivar la opción de PSRAM, y en caso de superar 1 MB de binario, seleccionar 4 MB de partición a la hora de subir. Aunque el código no use PSRAM, si la opción está activa y nuestro ESP32 no dispone de ella, se generará una excepción y reinicio del mismo en modo bucle.
 
+
+
+<br>
 <h1>Generar .h</h1>
 He creado una tool para generar la estructura de las 10 roms .h:
 
