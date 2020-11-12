@@ -37,12 +37,28 @@ f:\Users\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\2.6.1/esptool.e
 
 The directories should be replaced by ours, as well as the COM port and speed.
 
-Tool to generate struct 10 roms .h:
+
+
+<br>
+<h1>Arduino IDE</h1>
+The whole project is compatible with the structure of Arduino 1.8.11.
+<center><img src='https://raw.githubusercontent.com/rpsubc8/ESP32TinyZXSpectrum/main/preview/previewArduinoIDEpreferences.gif'></center>
+We must install the spressif extensions in the additional card url manager <b>https://dl.espressif.com/dl/package_esp32_index.json</b>
+<center><img src='https://raw.githubusercontent.com/rpsubc8/ESP32TinyZXSpectrum/main/preview/previewArduinoIDElibrary.gif'></center>
+We need the libraries of <b>bitluni 0.3.3</b> and <b>fabgl 0.9.0</b>.
+We can do it from the library manager.
+We must deactivate the PSRAM option, and in case of exceeding 1 MB of binary, select 4 MB of partition when uploading. Although the code does not use PSRAM, if the option is active and our ESP32 does not have it, an exception will be generated and restart it in loop mode.
+
+
+
+<br>
+<h1>Generate .h</h1>
+I have created a tool to generate the structure of the 10 roms .h:
 
 https://github.com/rpsubc8/esp32gameboy/tree/master/arduino/tools
 
-The roms .gb must be introduced in the directory rom, and when launching:
+The roms .gb files must be entered in the rom directory, and must be launched:
 <pre>
  rom2h roms
 </pre>
-All the .h that we must drop in the project will be generated.
+All the .h that are generated, must be released to the project, overwriting the current ones.
