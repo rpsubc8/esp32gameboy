@@ -56,7 +56,7 @@ He creado una tool para generar la estructura de las 10 roms .h:
 
 https://github.com/rpsubc8/esp32gameboy/tree/master/arduino/tools
 
-Los archivos roms .gb deben ser introducidos en el directorio rom, and se debe lanzar:
+Los archivos roms .gb deben ser introducidos en el directorio rom, y se debe lanzar:
 <pre>
  rom2h roms
 </pre>
