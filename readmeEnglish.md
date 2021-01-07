@@ -57,9 +57,9 @@ The following actions are allowed from the menu (F1 key):
  <ul>  
   <li>Select ROM allows to choose the disk.</li>
   <li>Change the milliseconds of keyboard polling</li>
-  <CPU speed
-  <Turn the sound on and off  
-  <Emulator and chip restart  
+  <li>CPU speed</li>
+  <li>Turn the sound on and off</li>
+  <li>Emulator and chip restart</li>
  </ul>
  The keys to play are:
  <pre>
@@ -101,8 +101,8 @@ The file <b>gbConfig.h</b> options are selected:
  <li><b>gb_frame_crt_skip:</b> If it is 1 it skips a frame.</li>
  <li><b>use_lib_vga_thread:</b> Experimental multithreading mode, for now it is very slow.</li>
  <li><b>use_min_ram:</b> Does not use any cache bank, saving memory, but being slower.</li>
- <li><b>use_half_ram</b>Use 4 cache banks, gaining speed, sacrificing memory.</li>
- <li><b>use_max_ram</b>Use 8 cache banks, gaining speed, sacrificing memory.</li>
+ <li><b>use_half_ram:</b>Use 4 cache banks, gaining speed, sacrificing memory.</li>
+ <li><b>use_max_ram:</b>Use 8 cache banks, gaining speed, sacrificing memory.</li>
 </ul>
 
 
