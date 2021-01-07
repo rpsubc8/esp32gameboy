@@ -1,11 +1,20 @@
 //Author: ackerman
-//Convert 10 roms .gb to .h Arduino compile gameboy emulate
+//Convert roms .gb to .h Arduino compile gameboy emulate
+//input
+// roms
+//  onehour.gb
+//output
+// dataFlash
+//  gbrom.h
+//  roms
+//   romonehour.h
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <dirent.h>
 
-#define maxRom 10
+#define maxObjects 255
+#define max_cad_title 12
 
 unsigned char gb_bufferFile[2248000]; //2 MB y algo
 
@@ -17,25 +26,46 @@ int GetSizeFile(char *cadFile);
 void InitTitles(void);
 
 FILE *gb_fileWrite = NULL;
-char gb_titles[maxRom][2048];
+char gb_titles[maxObjects][32];
+char gb_nameFiles[maxObjects][64];
+char gb_nameDir[maxObjects][64];
 unsigned char gb_contRom=0;
+
+void RemoveExt(char *cad)
+{
+ int total= strlen(cad);
+ if (total > max_cad_title)
+ {
+  total= max_cad_title;
+  cad[max_cad_title]='\0';
+ }
+ for (int i=0;i<total;i++)
+ {
+  if (cad[i]==' ')   
+   cad[i] = '_';
+  else
+  {
+   if (cad[i]=='.')
+   {
+    cad[i]='\0';
+    return;
+   }
+  }
+ }
+}
+
 
 //**********************************************
 void InitTitles()
 {
- for (unsigned char i=0;i<maxRom;i++)
+ for (unsigned char i=0;i<maxObjects;i++)
   gb_titles[i][0]='\0';
 }
 
 //**********************************************
 void ShowHelp()
 {
- printf("Author: ackerman\n");
- printf("\n");
- printf(" rom2h directory\n");
- printf("\n");
- printf("Example:\n");
- printf(" rom2h roms");
+ printf("Author: ackerman\n\n");
 }
 
 //**********************************************
@@ -54,7 +84,7 @@ int GetSizeFile(char *cadFile)
 }
 
 //**********************************************
-void WriteFileRom(unsigned char num,char *cadPath,char *cadFile)
+void WriteFileROM(unsigned char num,char *cadPath,char *cadFile, char *cadFileSource)
 {
  unsigned char contLine=0;
  FILE *auxWrite = NULL;
@@ -62,18 +92,23 @@ void WriteFileRom(unsigned char num,char *cadPath,char *cadFile)
  long auxSize=0;
  char cadDest[2048];
  char cadOri[2048];
- sprintf(cadOri,"%s\\%s",cadPath,cadFile);
- sprintf(cadDest,"gbRom%d.h",num);
+ sprintf(cadOri,"%s\\%s",cadPath,cadFileSource);
+ sprintf(cadDest,"output/dataFlash/roms/rom%s.h",cadFile);
  auxWrite = fopen(cadDest,"w+");
  if (auxWrite!= NULL)
  {
-  fprintf(auxWrite,"//%s\n",cadFile);
-  fprintf(auxWrite,"const unsigned char gb_rom_%d_data[] PROGMEM ={\n",num);
-  //printf ("Cadori %s\n",cadOri);
+  fprintf(auxWrite,"#ifndef _ROM_%s_H\n",cadFile);
+  fprintf(auxWrite," #define _ROM_%s_H\n",cadFile);     
+  //WriteHexData(auxWrite,cadFile);  
+
   auxRead = fopen(cadOri,"rb");
   if (auxRead!=NULL)
   {
    auxSize = GetSizeFile(cadOri);
+   
+   fprintf(auxWrite," //rom %s %d bytes\n\n",cadFile,auxSize);
+   fprintf(auxWrite,"const unsigned char gb_rom_%s[]={\n",cadFile);
+      
    //printf ("Tam %d",auxSize);
    fread(gb_bufferFile,1,auxSize,auxRead);
    for (long i=0;i<auxSize;i++)
@@ -91,59 +126,93 @@ void WriteFileRom(unsigned char num,char *cadPath,char *cadFile)
    fclose(auxRead);
   }
   
-  fprintf(auxWrite,"};\n");
+  
+  fprintf(auxWrite,"\n};\n");
+  fprintf(auxWrite,"#endif\n");
   fclose(auxWrite);
  }
 }
 
+
 //**********************************************
-void WriteHeadH(char *titleArray, unsigned char totalTitle)
-{//Cabecera las 10 roms
+void WriteHeadROM_H(char *cadDefine)
+{//Los 48k
  if (gb_fileWrite == NULL)
   return;
- fprintf(gb_fileWrite,"#ifndef GB_ROM_H\n");
- fprintf(gb_fileWrite," #define GB_ROM_H\n"); 
+ fprintf(gb_fileWrite,"#ifndef %s\n",cadDefine);
+ fprintf(gb_fileWrite," #define %s\n",cadDefine); 
  fprintf(gb_fileWrite,"\n");
- fprintf(gb_fileWrite," #define max_rom_gb 10\n");
- fprintf(gb_fileWrite,"\n");
- for (unsigned char i=0;i<maxRom;i++)
+ fprintf(gb_fileWrite," //#include <stddef.h>\n");
+ for (unsigned char i=0;i<gb_contRom;i++)
  {
   if (strlen(gb_titles[i]) != 0)
-   fprintf(gb_fileWrite," #include \"gbRom%d.h\"\n",i);
+   fprintf(gb_fileWrite," #include \"roms/rom%s.h\"\n",gb_titles[i]);
  }
  fprintf(gb_fileWrite,"\n");
- fprintf(gb_fileWrite," //10 roms title\n");
- fprintf(gb_fileWrite," const char * gb_roms_title[max_rom_gb] PROGMEM={\n");
- for (unsigned char i=0;i<maxRom;i++)
+ fprintf(gb_fileWrite," #define max_list_rom %d\n\n\n",gb_contRom);
+ fprintf(gb_fileWrite," //roms\n //Titulos\n");
+ fprintf(gb_fileWrite," static const char * gb_list_rom_title[max_list_rom]={\n");
+ for (unsigned char i=0;i<gb_contRom;i++)
  {
   if (strlen(gb_titles[i]) == 0)
    fprintf(gb_fileWrite,"  \"\"");
   else 
-   fprintf(gb_fileWrite,"  \"%d %s\"",i,gb_titles[i]);
-  if (i<(maxRom-1))
+   fprintf(gb_fileWrite,"  \"%s\"",gb_titles[i]);
+  if (i<(gb_contRom-1))
    fprintf(gb_fileWrite,",\n");
  }
  fprintf(gb_fileWrite,"\n };\n");
  fprintf(gb_fileWrite,"\n");
- fprintf(gb_fileWrite," //10 roms pointer to data\n");
- fprintf(gb_fileWrite," const unsigned char * gb_roms_data[max_rom_gb] PROGMEM={\n");
- for (unsigned char i=0;i<maxRom;i++)
+ fprintf(gb_fileWrite," //Datos rom\n");
+ fprintf(gb_fileWrite," static const unsigned char * gb_list_rom_data[max_list_rom]={\n");
+ for (unsigned char i=0;i<gb_contRom;i++)
  {
   if (strlen(gb_titles[i]) == 0)
    fprintf(gb_fileWrite,"  NULL");
   else 
-   fprintf(gb_fileWrite,"  gb_rom_%d_data",i);
-  if (i<(maxRom-1))
+   fprintf(gb_fileWrite,"  gb_rom_%s",gb_titles[i]);
+  if (i<(gb_contRom-1))
    fprintf(gb_fileWrite,",\n");   
  }  
  fprintf(gb_fileWrite,"\n };\n");
+ 
  fprintf(gb_fileWrite,"\n");
- fprintf(gb_fileWrite,"#endif\n");
+ //fprintf(gb_fileWrite,"#endif\n");
 }
+
+
+//********************************************
+void WriteSizeROM()
+{
+ char cadDestino[1024];
+ int auxSize;
+ if (gb_fileWrite == NULL)
+  return;
+ fprintf(gb_fileWrite," //Tamanio en bytes\n");
+ fprintf(gb_fileWrite," //static const int gb_list_rom_size[max_list_rom]={\n");
+ for (unsigned char i=0;i<gb_contRom;i++)
+ {
+  if (strlen(gb_titles[i]) == 0)
+   fprintf(gb_fileWrite,"  //\"\"");
+  else
+  {
+   sprintf(cadDestino,"input\\roms\\%s",gb_nameFiles[i]);   
+   auxSize = GetSizeFile(cadDestino);
+   fprintf(gb_fileWrite," // %d",auxSize);
+  }
+  if (i<(gb_contRom-1))
+   fprintf(gb_fileWrite,"//,\n");
+ }
+ fprintf(gb_fileWrite,"\n //};\n");
+ fprintf(gb_fileWrite,"\n");  
+}
+
+
 
 //**********************************************
 void listFilesRecursively(char *basePath)
-{
+{     
+    char cadFileSource[1000];
     char path[1000];
     struct dirent *dp;
     DIR *dir = opendir(basePath);
@@ -154,14 +223,16 @@ void listFilesRecursively(char *basePath)
         if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)
         {
             printf("%s\n", dp->d_name);
-            WriteFileRom(gb_contRom,basePath,dp->d_name);
-            int auxLen = strlen(dp->d_name);
-            if (auxLen>8)
-             auxLen=8;
+            
+            strcpy(cadFileSource,dp->d_name);
+            strcpy(gb_nameFiles[gb_contRom],dp->d_name); //Nombre completo
+            RemoveExt(dp->d_name);
             strcpy(gb_titles[gb_contRom],dp->d_name);
-            gb_titles[gb_contRom][auxLen]='\0';
+
+            WriteFileROM(gb_contRom,basePath,dp->d_name,cadFileSource);            
+                        
             gb_contRom++;
-            if (gb_contRom > (maxRom-1))
+            if (gb_contRom > (maxObjects-1))
              return;
             // Construct new path from our base path
             strcpy(path, basePath);
@@ -173,28 +244,37 @@ void listFilesRecursively(char *basePath)
     closedir(dir);
 }
 
+//*************************************************
+void ProcesaFicherosROM()
+{
+ gb_contRom=0;
+ gb_fileWrite = fopen("output/dataFlash/gbrom.h","w+");
+ if (gb_fileWrite!= NULL)
+ {
+  listFilesRecursively("input/roms");
+  WriteHeadROM_H("_GB_ROM_H");
+  WriteSizeROM();
+  fprintf(gb_fileWrite,"#endif\n");
+  fclose(gb_fileWrite);
+ }     
+}
+
+
+
 //********
 //* MAIN *
 //********
 int main(int argc, char**argv)
 {
  char path[100];    //Directory path to list files
- if (argc<2)
- {
-  ShowHelp();
-  return 0;
- }
+ ShowHelp();
+
  InitTitles();
- gb_fileWrite = fopen("gbrom.h","w+");
- if (gb_fileWrite!= NULL)
- {
-  listFilesRecursively(argv[1]);
-  WriteHeadH(NULL,10);
-  fclose(gb_fileWrite);
- }
-  //printf("Enter path to list files: ");    // Input path from user
-  //scanf("%s", path);
-  //listFilesRecursively(path);
+ 
+ ProcesaFicherosROM();
+ //printf("Enter path to list files: ");    // Input path from user
+ //scanf("%s", path);
+ //listFilesRecursively(path);
  
  return 0;
 }
