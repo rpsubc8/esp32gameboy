@@ -66,10 +66,10 @@ Se permiten las siguientes acciones desde el menú (tecla F1):
  <pre>
   Teclado ESP32        Joystick GB
   -----------------------------------
-   Arriba            - cursor arriba
-   Abajo             - cursor abajo
-   Izquierda         - cursor izquierda
-   Derecha           - cursor derecha
+   Cursor arriba     - arriba
+   Cursor abajo      - abajo
+   Cursor izquierda  - izquierda
+   Cursor derecha    - derecha
    a                 - A
    z                 - B
    Barra espaciadora - Start
