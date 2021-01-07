@@ -72,7 +72,7 @@ Los archivos roms .gb deben ser introducidos en el directorio:
  input
   roms  
 </pre>
-Y se debe lanzar el ejecutable <b><rom2h/b>
+Y se debe lanzar el ejecutable <b><rom2h</b>
 </pre>
 Se generará en el directorio:
 <pre>
