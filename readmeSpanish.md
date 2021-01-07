@@ -25,13 +25,13 @@ Se requiere:
   <li>Librería Arduino fabgl 0.9.0 (incluida en proyecto PLATFORMIO)</li>
   <li>Librería Arduino bitluni 0.3.3 (incluida en proyecto)</li>
  </ul>
-<center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/main/preview/ttgovga32v12.jpg'></center> 
+<center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/master/preview/ttgovga32v12.jpg'></center> 
 <br>
 
 
 <h1>PlatformIO</h1>
 Se debe instalar el PLATFORMIO 2.2.0 desde las extensiones del Visual Studio.
-<center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/main/preview/previewPlatformIOinstall.gif'></center>
+<center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/master/preview/previewPlatformIOinstall.gif'></center>
 Luego se seleccionará el directorio de trabajo <b>gameboy</b>.
 Debemos modificar el fichero <b>platformio.ini</b> la opción <b>upload_port</b> para seleccionar el puerto COM donde tenemos nuestra placa TTGO VGA32.
 <center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/main/preview/previewPlatformIO.gif'></center>
@@ -43,9 +43,9 @@ Está todo preparado para no tener que instalar las librerias de bitluni. Sin em
 <h1>Arduino IDE</h1>
 Todo el proyecto es compatible con la estructura de Arduino 1.8.11.
 Tan sólo tenemos que abrir el <b>CPCem.ino</b> del directorio <b>CPCem</b>.
-<center><img src='https://raw.githubusercontent.com/rpsubc8/ESP32TinyCPC/main/preview/previewArduinoIDEpreferences.gif'></center>
+<center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/master/preview/previewArduinoIDEpreferences.gif'></center>
 Debemos instalar las extensiones de spressif en el gestor de urls adicionales de tarjetas <b>https://dl.espressif.com/dl/package_esp32_index.json</b>
-<center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/main/preview/previewArduinoIDElibrary.gif'></center>
+<center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/master/preview/previewArduinoIDElibrary.gif'></center>
 Para el modo normal, ya está preparado el proyecto, de forma que no se necesita ninguna librería de bitluni. Sin embargo, si necesitamos el soporte de sonido, se requiere instalar las librerias <b>fabgl 0.9.0</b>.
 Lo podemos hacer desde el administrador de bibliotecas.
 Debemos desactivar la opción de PSRAM, y en caso de superar 1 MB de binario, seleccionar 4 MB de partición a la hora de subir. Aunque el código no use PSRAM, si la opción está activa y nuestro ESP32 no dispone de ella, se generará una excepción y reinicio del mismo en modo bucle.
@@ -77,7 +77,7 @@ Se permiten las siguientes acciones desde el menú (tecla F1):
  </pre><br>
  Se dispone de un OSD básico de bajos recursos, es decir, muy simple, que se visualiza pulsando la tecla <b>F1</b>.
  Para movernos por el OSD, usamos los cursores, el <b>ENTER</b> para aceptar y el <b>ESC</b> para cancelar.
- <center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/main/preview/previewOSD.gif'></center>
+ <center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/master/preview/previewOSD.gif'></center>
  Los ficheros deben ser convertidos a .h en hexadecimal. Puede usarse la herramienta online:<br>
  <a href='http://tomeko.net/online_tools/file_to_hex.php?lang=en'>http://tomeko.net/online_tools/file_to_hex.php?lang=en</a>
  Para las <b>roms</b> se debe utilizar la herramienta <b>rom2h</b> para generar los .h necesarios.
