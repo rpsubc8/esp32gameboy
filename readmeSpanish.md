@@ -2,9 +2,16 @@
 
 <center><img src="https://github.com/rpsubc8/esp32gameboy/blob/master/preview/preview.jpg"></center>
 Emulador de Gameboy (fork lualiliu) para la placa TTGO VGA32 con chip ESP32.
-<ul>
- <li><b>fabgl:</b> sonido, vga, teclado y 4 bancos de cache</li>
- <li><b>vga32:</b> vga, teclado y 8 bancos de cache</li>
+<ul> 
+ <li><b>vga32:</b> vga, teclado y hasta 8 bancos de cache</li>
+ <li>No se usa PSRAM, funcionando en ESP32 de 520 KB de RAM (TTGO VGA32)</li>
+ <li>Uso de un sólo core</li>
+ <li>OSD de bajos recursos</li>
+ <li>Creado proyecto compatible con Arduino IDE y Platform IO</li>
+ <li>Sonido con la libreria fabgl</li>
+ <li>Soporte para modo 8 y 64 colores.</li>
+ <li>VGA 200x150 y 320x175</li>
+ <li>Emulación de la Game Boy clásica</li>
 </ul> 
 
 
@@ -62,8 +69,40 @@ Se permiten las siguientes acciones desde el menú (tecla F1):
 
 
 <br>
+<h1>Opciones</h1>
+El archivo <b>gbConfig.h</b> se seleccionan las opciones:
+<ul>
+ <li><b>use_lib_200x150:</b> Se usa modo de vídeo 200x150.</li> 
+ <li><b>use_lib_320x175:</b> Se usa modo de vídeo 320x175.</li>  
+ <li><b>use_lib_vga8colors:</b> Obliga a usar RGB modo de 8 colores (3 pines). Consume poca ram y es muy rápido, pero sólo saca 8 colores, frente a los 64 del modo normal (6 pines RRGGBB).</li>
+ <li><b>use_lib_vga64colors:</b> Obliga a usar RRGGBB modo de 64 colores (6 pines). Consume más ram y es más lento, pero saca 64 colores (escala de grises).</li>
+ <li><b>use_lib_vga_low_memory:</b> Modo experimental de bajo consumo de RAM de video, pero más lento.</li> 
+ <li><b>use_lib_fast_vga:</b> Modo experimental ultra rápido, que se consigue casi el doble de velocidad de acceso a video. En el modo de 8 colores, saca una paleta estilo CGA clásica, y en el modo 64 colores, escala de grises.</li>
+ <li><b>use_lib_fast_vgaBLUE8colors:</b> Modo experimental ultra rápido para el modo de 8 colores, usando paleta azul.</li>
+ <li><b>use_lib_fast_vgaRED8colors:</b> Modo experimental ultra rápido para el modo de 8 colores, usando paleta roja.</li>
+ <li><b>use_lib_fabgl_sound:</b> Se utiliza un mezclador de 3 canales en modo dirty. Consume bastante ram. Se requiere la librería fabgl 0.9.0</li>
+ <li><b>use_lib_log_serial:</b> Se envian logs por puerto serie usb</li>
+ <li><b>usb_lib_optimice_checkchange_bankswitch:</b> Sólo conmuta bancos cuando son distintos, ganando velocidad.</li> 
+ <li><b>gb_ms_joy:</b> Se debe especificar el número de milisegundos de polling para el teclado.</li>
+ <li><b>gb_frame_crt_skip:</b> Si es 1 se salta un frame.</li>
+ <li><b>use_lib_vga_thread:</b> Modo multihilo experimental, por ahora es muy lento.</li>
+ <li><b>use_min_ram:</b> No usa ningún banco de cache, ahorrando memoria, pero siendo más lento.</li>
+ <li><b>use_half_ram:</b> Usa 4 bancos de cache, ganando velocidad, sacrificando memoria.</li>
+ <li><b>use_max_ram:</b> Usa 8 bancos de cache, ganando velocidad, sacrificando memoria.</li>
+</ul>
+
+
+<br>
+<h1>Aplicaciones Test</h1>
+Podemos elegir los siguientes juegos:
+<ul>
+ <li><b>Last Crownr</b></li>
+ <li><b>Retroid</b></li> 
+</ul>
+
+<br>
 <h1>Generar .h</h1>
-He creado una tool para generar la estructura de las 10 roms .h:
+He creado una tool para generar la estructura de las roms en .h:
 
 https://github.com/rpsubc8/esp32gameboy/tree/master/arduino/tools
 
@@ -72,7 +111,7 @@ Los archivos roms .gb deben ser introducidos en el directorio:
  input
   roms  
 </pre>
-Y se debe lanzar el ejecutable <b><rom2h</b>
+Y se debe lanzar el ejecutable <b>rom2h</b>
 </pre>
 Se generará en el directorio:
 <pre>
