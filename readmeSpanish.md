@@ -3,7 +3,8 @@
 <center><img src="https://github.com/rpsubc8/esp32gameboy/blob/master/preview/preview.jpg"></center>
 Emulador de Gameboy (fork lualiliu) para la placa TTGO VGA32 con chip ESP32.
 <ul> 
- <li><b>vga32:</b> vga, teclado y hasta 8 bancos de cache</li>
+ <li>Uso de vga y teclado</li>
+ <li>Hasta 8 bancos de cache</li>
  <li>No se usa PSRAM, funcionando en ESP32 de 520 KB de RAM (TTGO VGA32)</li>
  <li>Uso de un sólo core</li>
  <li>OSD de bajos recursos</li>
@@ -112,7 +113,7 @@ Los archivos roms .gb deben ser introducidos en el directorio:
   roms  
 </pre>
 Y se debe lanzar el ejecutable <b>rom2h</b>
-</pre>
+</pre><br>
 Se generará en el directorio:
 <pre>
  output
