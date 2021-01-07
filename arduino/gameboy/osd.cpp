@@ -67,7 +67,7 @@ const char * gb_osd_screen_values[max_gb_osd_screen_values]={
 const char * gb_main_menu[max_gb_main_menu]={
  "Load ROM",
  "Speed",
- "Sonido",
+ "Sound",
  "Reset",
  "Return"
 };
