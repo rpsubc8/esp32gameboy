@@ -1,6 +1,6 @@
 # ESP32 Gameboy
 
-<center><img src="https://github.com/rpsubc8/esp32gameboy/blob/master/preview/preview.jpg"></center>
+<center><img src="https://github.com/rpsubc8/esp32gameboy/blob/master/preview/preview.gif"></center>
 Emulador de Gameboy (fork lualiliu) para la placa TTGO VGA32 con chip ESP32.
 <ul> 
  <li>Uso de vga y teclado</li>
