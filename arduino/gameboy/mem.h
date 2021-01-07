@@ -8,6 +8,7 @@
 //JJ #endif
 
 #include "rom.h"
+#include "gbConfig.h"
 
 //static unsigned char *mem; //memoria al principio
 static unsigned char *mem; //memoria al principio
@@ -20,8 +21,10 @@ static unsigned char *mem; //memoria al principio
 //void MEMUpload(unsigned char *auxBuf, int auxLen);
 //void mem_initWIFI(void);
 void MemAssignPtrMem(unsigned char *);
-#ifdef use_max_ram
+void ResetDMAPending(void);
+#if defined(use_max_ram) || defined (use_half_ram)
  void MemPreparaBankSwitchPtr(unsigned char **ptr);
+ void MemBankSwitchClear();
 #endif 
 unsigned char * MemGetAddressMem(void);
 void MemAssignROMPtrMemory(void);

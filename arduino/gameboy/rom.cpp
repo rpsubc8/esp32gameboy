@@ -1,7 +1,9 @@
 
+#include "gbConfig.h"
 #include <stdio.h>
 #include <string.h>
 #include "rom.h"
+#include <Arduino.h>
 
 const unsigned char *bytes;
 //unsigned char *bytes; //Para remapeo a RAM
@@ -191,7 +193,9 @@ int rom_init(const unsigned char *rombytes)
 
 	memcpy(buf, &rombytes[0x134], 16);
 	buf[16] = '\0';
-	printf("Rom title: %s\n", buf);
+  #ifdef use_lib_log_serial
+	 Serial.printf("Rom title: %s\n", buf);
+  #endif 
 
 	type = rombytes[0x147];
 
@@ -204,28 +208,38 @@ int rom_init(const unsigned char *rombytes)
 	else if(bank_index > 7)
 		bank_index = 11;
 
-	printf("Rom size: %s\n", banks[bank_index]);
-
+  #ifdef use_lib_log_serial
+ 	 Serial.printf("Rom size: %s\n", banks[bank_index]);
+  #endif
+  
 	ram = rombytes[0x149];
 	if(ram > 3)
 		ram = 4;
 
-	printf("RAM size: %s\n", rams[ram]);
+  #ifdef use_lib_log_serial
+	 Serial.printf("RAM size: %s\n", rams[ram]);
+  #endif 
 
 	region = rombytes[0x14A];
 	if(region > 2)
 		region = 2;
-	printf("Region: %s\n", regions[region]);
+  #ifdef use_lib_log_serial
+	 Serial.printf("Region: %s\n", regions[region]);
+  #endif 
 
 	version = rombytes[0x14C];
-	printf("Version: %02X\n", version);
+  #ifdef use_lib_log_serial
+	 Serial.printf("Version: %02X\n", version);
+  #endif 
 
 	for(i = 0x134; i <= 0x14C; i++)
 		checksum = checksum - rombytes[i] - 1;
 
 	pass = rombytes[0x14D] == checksum;
 
-	printf("Checksum: %s (%02X)\n", pass ? "OK" : "FAIL", checksum);
+  #ifdef use_lib_log_serial
+	 Serial.printf("Checksum: %s (%02X)\n", pass ? "OK" : "FAIL", checksum);
+  #endif
 	if(!pass)
 		return 0;
 

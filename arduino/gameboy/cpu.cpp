@@ -2,6 +2,7 @@
 #include "mem.h"
 #include "rom.h"
 #include "interrupt.h"
+#include "gbConfig.h"
 
 #define set_HL(x) do {unsigned int macro = (x); c.L = macro&0xFF; c.H = macro>>8;} while(0)
 #define set_BC(x) do {unsigned int macro = (x); c.C = macro&0xFF; c.B = macro>>8;} while(0)
@@ -61,7 +62,8 @@ void cpu_init(void)
 	set_HL(0x014D);
 	c.SP = 0xFFFE;
 	c.PC = 0x0100;
-	c.cycles = 0;  
+	c.cycles = 0;
+	ResetDMAPending();
 }
 
 static void RLC(unsigned char reg)
@@ -689,9 +691,10 @@ unsigned int cpu_get_cycles(void)
 
 void cpu_print_debug(void)
 {
+ #ifdef use_lib_log_serial
 	printf("%04X: %02X\n", c.PC, mem_get_byte(c.PC));
-	printf("\tAF: %02X%02X, BC: %02X%02X, DE: %02X%02X, HL: %02X%02X SP: %04X, cycles %d\n",
-		c.A, c.F, c.B, c.C, c.D, c.E, c.H, c.L, c.SP, c.cycles);
+	printf("\tAF: %02X%02X, BC: %02X%02X, DE: %02X%02X, HL: %02X%02X SP: %04X, cycles %d\n", c.A, c.F, c.B, c.C, c.D, c.E, c.H, c.L, c.SP, c.cycles);
+ #endif   
 }
 
 int cpu_cycle(void)
@@ -2447,8 +2450,10 @@ int cpu_cycle(void)
 			c.cycles += 4;
 		break;
 		default:
-			printf("Unhandled opcode %02X at %04X\n", b, c.PC);
+     #ifdef use_lib_log_serial      
+  		printf("Unhandled opcode %02X at %04X\n", b, c.PC);
 			printf("cycles: %d\n", c.cycles);
+     #endif 
 			return 0;
 		break;
 	}

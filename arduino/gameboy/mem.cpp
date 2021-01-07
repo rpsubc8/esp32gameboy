@@ -18,7 +18,7 @@ static int joypad_select_buttons, joypad_select_directions;
 static unsigned short int gb_mem_bank_switch_prev=0;
 const unsigned char *ptr_rom_getbytes=NULL; //Puntero a la ROM para switch
 
-#ifdef use_max_ram
+#if defined(use_max_ram)|| defined (use_half_ram)
  static unsigned char cont_bank_switch_cur = 0;
  static unsigned short int cache_bank_switch_number[maxBankSwitch];
  static unsigned char * cache_bank_switch_data[maxBankSwitch];
@@ -83,12 +83,18 @@ const unsigned char *ptr_rom_getbytes=NULL; //Puntero a la ROM para switch
 }
 */
 
+void ResetDMAPending()
+{
+ DMA_pending = 0;
+ gb_mem_bank_switch_prev = 0;
+}
+
 void MemAssignPtrMem(unsigned char *ptr)
 {
  mem = ptr;
 }
 
-#ifdef use_max_ram
+#if defined(use_max_ram) || defined(use_half_ram)
  //*****************************************
  void MEMResetBankSwithBuffers()
  {
@@ -106,6 +112,14 @@ void MemAssignPtrMem(unsigned char *ptr)
   for (unsigned char i=0;i<maxBankSwitch;i++)
    cache_bank_switch_data[i] = ptr[i];
  }
+
+ void MemBankSwitchClear()
+ {
+  for (unsigned char i=0;i<maxBankSwitch;i++)
+   memset(cache_bank_switch_data[i],1,0x4000);
+  MEMResetBankSwithBuffers();
+  cont_bank_switch_cur=0;
+ }
 #endif
 
 //********************************************************
@@ -120,7 +134,7 @@ void MemAssignROMPtrMemory()
  ptr_rom_getbytes= rom_getbytes();
 }
 
-#ifdef use_max_ram
+#if defined(use_max_ram)|| defined (use_half_ram)
  //********************************************************
  char SearchBank(unsigned short int aBank)
  {
@@ -134,12 +148,14 @@ void MemAssignROMPtrMemory()
   //No se ha encontrado,lo metemos
   aReturn = cont_bank_switch_cur;
   cache_bank_switch_number[cont_bank_switch_cur++]= aBank;
-  memcpy (cache_bank_switch_data[aReturn],&ptr_rom_getbytes[aBank * 0x4000],0x4000); 
-  #ifdef lib_compile_fabgl
-   cont_bank_switch_cur = cont_bank_switch_cur & 0x03;
-  #endif
-  #ifdef lib_compile_vga32
-   cont_bank_switch_cur = cont_bank_switch_cur & 0x07;  
+  //memcpy (cache_bank_switch_data[aReturn],&ptr_rom_getbytes[aBank * 0x4000],0x4000); 
+  memcpy (cache_bank_switch_data[aReturn],&ptr_rom_getbytes[(aBank<<14)],0x4000);
+  #ifdef use_max_ram
+   cont_bank_switch_cur = cont_bank_switch_cur & 0x07;
+  #else 
+   #ifdef use_half_ram
+    cont_bank_switch_cur = cont_bank_switch_cur & 0x03;
+   #endif  
   #endif
   return aReturn;
  }
@@ -150,16 +166,20 @@ void mem_bank_switch(unsigned short int n)
 {//Tarda entre 432 y 656 micros paso a 44 microsegundos con cache bancos
  unsigned char aSearch;
  //unsigned long time_prev;
+#ifdef usb_lib_optimice_checkchange_bankswitch
  if (n != gb_mem_bank_switch_prev)
+#endif
  {  
   gb_mem_bank_switch_prev= n; 
   //time_prev = micros();
-  #ifdef use_max_ram
+  #if defined(use_max_ram)|| defined (use_half_ram)
    aSearch = SearchBank(n);
    memcpy (&mem[0x4000],cache_bank_switch_data[aSearch],0x4000);    
-  #endif
-  #ifdef use_min_ram
-   memcpy(&mem[0x4000], &ptr_rom_getbytes[n * 0x4000], 0x4000);
+  #else
+   //#ifdef use_min_ram
+   //memcpy(&mem[0x4000], &ptr_rom_getbytes[n * 0x4000], 0x4000);   
+   memcpy(&mem[0x4000], &ptr_rom_getbytes[(n<<14)], 0x4000);   
+   //#endif
   #endif
   //memcpy (&mem[0x4000],&ptr_rom_getbytes[n * 0x4000],0x4000);
   //time_prev = micros()-time_prev;
@@ -349,8 +369,8 @@ void mem_write_word(unsigned short d, unsigned short i)
 
 void mem_init(void)
 {
-	const unsigned char *bytes = rom_getbytes();
-  #ifdef use_max_ram
+  const unsigned char *bytes = rom_getbytes();
+  #if defined(use_max_ram) || defined (use_half_ram)
    MEMResetBankSwithBuffers();
   #endif
 

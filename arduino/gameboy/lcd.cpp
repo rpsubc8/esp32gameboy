@@ -4,13 +4,18 @@
 #include "interrupt.h"
 #include "sdl.h"
 #include "mem.h"
+#include "gbConfig.h"
+#include "gb_globals.h"
 
 
-static int lcd_line;
+//static int lcd_line;
+//static unsigned char lcd_current_frame=0; //El frame actual
+unsigned char gb_lcd_current_frame=0; //El frame actual
+int gb_lcd_line;
 
 static unsigned char * ptr_sdl_framebuffer=NULL;
 static unsigned short int * gb_pre_y_scanline; //precalculos cada linea 144 lineas
-//const unsigned char prueba[40] PROGMEM ={
+//const unsigned char prueba[40]={
 // 0   , 160, 320, 480, 640, 800, 960,1120,1280,1440,
 // 1600,1760,1920,1080,2240,2400,1560,2720,2880,3040,
 // 3200,3360,3520,3680,3840,4000,4160,4320,4480,4640,
@@ -44,7 +49,7 @@ static int window_x, window_y;
 static byte bgpalette[] = {3, 2, 1, 0};
 static byte sprpalette1[] = {0, 1, 2, 3};
 static byte sprpalette2[] = {0, 1, 2, 3};
-const unsigned long colours[4] PROGMEM = {0xFFFFFF, 0xC0C0C0, 0x808080, 0x000000};
+const unsigned long colours[4] = {0xFFFFFF, 0xC0C0C0, 0x808080, 0x000000};
 
 struct sprite {
 	//int y, x, tile, flags; //Para optimizar
@@ -119,7 +124,7 @@ void lcd_write_scroll_y(unsigned char n)
 
 int lcd_get_line(void)
 {
-	return lcd_line;
+	return gb_lcd_line;
 }
 
 void lcd_write_stat(unsigned char c)
@@ -374,7 +379,6 @@ static void jj_render_line(byte line)
 }*/
 
 
-
 //JJ modificado
 //int jj_lcd_cycle(void)
 void lcd_cycle_fast()
@@ -388,7 +392,7 @@ void lcd_cycle_fast()
   {
    case SPEED_NORMAL: break;
    case SPEED_TURBO: cycles = cycles<<1; break;
-   case SPEED_MEGATURBO: cycles = cycles*3; break;
+   case SPEED_MEGATURBO: cycles = (cycles<<1)+(cycles); break; //x3= x2+x1
    default: break;
   }
   //JJ if(sdl_update())
@@ -397,7 +401,7 @@ void lcd_cycle_fast()
   //this_frame = cycles % (70224/4);  
   //lcd_line = this_frame / (456/4);
   this_frame = cycles % 17556;
-  lcd_line = this_frame / 114;
+  gb_lcd_line = this_frame / 114;
 
   //if (prev_line == lcd_line)
   // return 1;
@@ -409,23 +413,32 @@ void lcd_cycle_fast()
     lcd_mode = 3;
   else if(this_frame < 114) //456/4)
     lcd_mode = 0;
-  if(lcd_line >= 144)
+  if(gb_lcd_line >= 144)
     lcd_mode = 1;
 
-  if(lcd_line != prev_line && lcd_line < 144)
-    jj_render_line(lcd_line); //Optimizado  
+  #ifdef gb_frame_crt_skip
+   if (gb_lcd_current_frame & 1)   
+   {
+    if(gb_lcd_line != prev_line && gb_lcd_line < 144)
+     jj_render_line(gb_lcd_line); //Optimizado
+   }
+  #else
+   if(gb_lcd_line != prev_line && gb_lcd_line < 144)
+    jj_render_line(gb_lcd_line); //Optimizado
+  #endif   
 
-  if(ly_int && lcd_line == lcd_ly_compare)
+  if(ly_int && gb_lcd_line == lcd_ly_compare)
     interrupt(INTR_LCDSTAT);
 
-  if(prev_line == 143 && lcd_line == 144)
+  if(prev_line == 143 && gb_lcd_line == 144)
   {
+    gb_lcd_current_frame++;
     //draw_stuff();
     interrupt(INTR_VBLANK);
     sdl_frame();
     //printf("INTR VIDEO\n");
   }
-  prev_line = lcd_line;
+  prev_line = gb_lcd_line;
 
   
 

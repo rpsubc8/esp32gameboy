@@ -1,5 +1,7 @@
 #include "sdl.h"
 #include "lcd.h"
+#include "gbConfig.h"
+#include "gb_globals.h"
 
 //#define byte unsigned char
 
@@ -9,27 +11,29 @@
 //static byte * pixels = NULL; //(byte *)malloc(5760);
 //static byte * gb_pixels_backup = NULL; //(byte *)malloc(5760); //GAMEBOY_HEIGHT * GAMEBOY_WIDTH / 4];
 
-static byte button_start, button_select, button_a, button_b, button_down, button_up, button_left, button_right;
+//static byte button_start, button_select, button_a, button_b, button_down, button_up, button_left, button_right;
 
 //static byte *gb_sdl_vgaBuf;
-static uint8_t **gb_sdl_scanline_p;
-static unsigned short int * gb_lookup_y; //precalculos cada linea 144
+//static uint8_t **gb_sdl_scanline_p;
+//static unsigned short int * gb_lookup_y; //precalculos cada linea 144
 
-//****************************
-void SDLAssignLookup160lines(unsigned short int *ptr)
-{
- gb_lookup_y = ptr;
- //for (byte i=0;i<144;i++)
- // gb_lookup_y[i]=(i*160);
-}
+//No se usa fabgl
+////****************************
+//void SDLAssignLookup160lines(unsigned short int *ptr)
+//{
+// gb_lookup_y = ptr;
+// //for (byte i=0;i<144;i++)
+// // gb_lookup_y[i]=(i*160);
+//}
 
 
-//****************************
-void SDL_AssignVGA(uint8_t **aux_scanline_p)
-{
-//VGA  gb_sdl_vgaBuf = auxBuf;
-  gb_sdl_scanline_p = aux_scanline_p;
-}
+//No se usa fabgl
+////****************************
+//void SDL_AssignVGA(uint8_t **aux_scanline_p)
+//{
+////VGA  gb_sdl_vgaBuf = auxBuf;
+//  gb_sdl_scanline_p = aux_scanline_p;
+//}
 
 //********************************************
 unsigned char * SDL_GetPointerPixels()
@@ -48,85 +52,94 @@ unsigned char * SDL_GetPointerPixels()
 
 //*******************************
 void SDL_AssignPtrPixels(unsigned char * auxPtr)
-{//Asignamos punteor, previo reservado con malloc
+{//Asignamos puntero, previo reservado con malloc
  pixels = auxPtr;
 }
 
-//*******************************
-void SDL_FlipLineRedFastFabgl(int aLine)
-{
- unsigned short int contOri=0;  
- unsigned short int contDest=0; 
- //unsigned char auxSwap; 
- if ((aLine<0)||(aLine>143))
-  return; //6 microsegundos
- 
- //unsigned long time_prev= micros();
- 
- for (contOri=gb_lookup_y[aLine]; contOri<(gb_lookup_y[aLine]+160); contOri+=4,contDest+=4)
- {
-  //auxSwap = pixels[contOri+2];
-  //pixels[contOri+2]= pixels[contOri]; //2     
-  //pixels[contOri]= auxSwap; //0   
+//#ifdef use_lib_vga_thread
+// //*******************************
+// void SDL_AssignBackupPtrPixels(unsigned char * auxPtr)
+// {//Asignamos puntero, previo reservado con malloc
+//  gb_pixels_backup = auxPtr;
+// }
+//#endif
 
-  //auxSwap = pixels[contOri+3];
-  //pixels[contOri+3]= pixels[contOri+1]; //3     
-  //pixels[contOri+1]= auxSwap;//1
+//No uso fabgl
+////*******************************
+//void SDL_FlipLineRedFastFabgl(int aLine)
+//{
+// unsigned short int contOri=0;  
+// unsigned short int contDest=0; 
+// //unsigned char auxSwap; 
+// if ((aLine<0)||(aLine>143))
+//  return; //6 microsegundos
+// 
+// //unsigned long time_prev= micros();
+// 
+// for (contOri=gb_lookup_y[aLine]; contOri<(gb_lookup_y[aLine]+160); contOri+=4,contDest+=4)
+// {
+//  //auxSwap = pixels[contOri+2];
+//  //pixels[contOri+2]= pixels[contOri]; //2     
+//  //pixels[contOri]= auxSwap; //0   
+//
+//  //auxSwap = pixels[contOri+3];
+//  //pixels[contOri+3]= pixels[contOri+1]; //3     
+//  //pixels[contOri+1]= auxSwap;//1
+//
+//  gb_sdl_scanline_p[aLine][contDest+2]=pixels[contOri];
+//  gb_sdl_scanline_p[aLine][contDest+3]=pixels[contOri+1];
+//  gb_sdl_scanline_p[aLine][contDest+0]=pixels[contOri+2];
+//  gb_sdl_scanline_p[aLine][contDest+1]=pixels[contOri+3];
+// }   
+// //contOri=gb_lookup_y[aLine];
+// //memcpy(gb_sdl_scanline_p[aLine],&pixels[contOri],160);
+//
+// //time_prev = micros()-time_prev;
+// //printf("Tiempo %d\n",time_prev);  
+//}
 
-  gb_sdl_scanline_p[aLine][contDest+2]=pixels[contOri];
-  gb_sdl_scanline_p[aLine][contDest+3]=pixels[contOri+1];
-  gb_sdl_scanline_p[aLine][contDest+0]=pixels[contOri+2];
-  gb_sdl_scanline_p[aLine][contDest+1]=pixels[contOri+3];
- }   
- //contOri=gb_lookup_y[aLine];
- //memcpy(gb_sdl_scanline_p[aLine],&pixels[contOri],160);
-
- //time_prev = micros()-time_prev;
- //printf("Tiempo %d\n",time_prev);  
-}
-
-//*******************************
-void SDL_FlipLineFastFabgl(int aLine)
-{
- unsigned short int contOri=0; 
- unsigned short int contDest=0; 
- unsigned char a;  
- //unsigned char a,b,c,d;  
- if ((aLine<0)||(aLine>143))
-  return;
- //contOri=(aLine*160);
- //printf ("Linea %d\n",aLine);
- //unsigned long time_prev= micros(); //9 a 13 micros
-  
- for (contOri=gb_lookup_y[aLine]; contOri<(gb_lookup_y[aLine]+160); contOri+=4,contDest+=4)
- {
-  //a = pixels[contOri];
-  //b = pixels[contOri+1];
-  //c = pixels[contOri+2];
-  //d = pixels[contOri+3];  
-  //pixels[contOri+2]= (a|(a<<2)|(a<<4)); //2  
-  //pixels[contOri+3]= (b|(b<<2)|(b<<4)); //3  
-  //pixels[contOri]= (c|(c<<2)|(c<<4)); //0  
-  //pixels[contOri+1]= (d|(d<<2)|(d<<4)); //1*/
-  a = pixels[contOri];
-  gb_sdl_scanline_p[aLine][contDest+2]= (a|(a<<2)|(a<<4)); //2  
-  a = pixels[contOri+1];
-  gb_sdl_scanline_p[aLine][contDest+3]= (a|(a<<2)|(a<<4)); //3  
-  a = pixels[contOri+2];
-  gb_sdl_scanline_p[aLine][contDest]= (a|(a<<2)|(a<<4)); //0  
-  a = pixels[contOri+3];  
-  gb_sdl_scanline_p[aLine][contDest+1]= (a|(a<<2)|(a<<4)); //1  
- }   
-// contOri=gb_lookup_y[aLine];
-// memcpy(gb_sdl_scanline_p[aLine],&pixels[contOri],160);
- 
-
- //borro la linea internamente
- //memset(&pixels[contOri],0,160);//Borra la linea
-
- //time_prev = micros()-time_prev;
- //printf("Tiempo %d\n",time_prev);  
-}
+////*******************************
+//void SDL_FlipLineFastFabgl(int aLine)
+//{
+// unsigned short int contOri=0; 
+// unsigned short int contDest=0; 
+// unsigned char a;  
+// //unsigned char a,b,c,d;  
+// if ((aLine<0)||(aLine>143))
+//  return;
+// //contOri=(aLine*160);
+// //printf ("Linea %d\n",aLine);
+// //unsigned long time_prev= micros(); //9 a 13 micros
+//  
+// for (contOri=gb_lookup_y[aLine]; contOri<(gb_lookup_y[aLine]+160); contOri+=4,contDest+=4)
+// {
+//  //a = pixels[contOri];
+//  //b = pixels[contOri+1];
+//  //c = pixels[contOri+2];
+//  //d = pixels[contOri+3];  
+//  //pixels[contOri+2]= (a|(a<<2)|(a<<4)); //2  
+//  //pixels[contOri+3]= (b|(b<<2)|(b<<4)); //3  
+//  //pixels[contOri]= (c|(c<<2)|(c<<4)); //0  
+//  //pixels[contOri+1]= (d|(d<<2)|(d<<4)); //1*/
+//  a = pixels[contOri];
+//  gb_sdl_scanline_p[aLine][contDest+2]= (a|(a<<2)|(a<<4)); //2  
+//  a = pixels[contOri+1];
+//  gb_sdl_scanline_p[aLine][contDest+3]= (a|(a<<2)|(a<<4)); //3  
+//  a = pixels[contOri+2];
+//  gb_sdl_scanline_p[aLine][contDest]= (a|(a<<2)|(a<<4)); //0  
+//  a = pixels[contOri+3];  
+//  gb_sdl_scanline_p[aLine][contDest+1]= (a|(a<<2)|(a<<4)); //1  
+// }   
+//// contOri=gb_lookup_y[aLine];
+//// memcpy(gb_sdl_scanline_p[aLine],&pixels[contOri],160);
+// 
+//
+// //borro la linea internamente
+// //memset(&pixels[contOri],0,160);//Borra la linea
+//
+// //time_prev = micros()-time_prev;
+// //printf("Tiempo %d\n",time_prev);  
+//}
 
 //********************************************
 //void SDL_Flip_fast()
@@ -200,18 +213,18 @@ void SDL_FlipLineFastFabgl(int aLine)
 
 
 //Joystick buttons
-void jj_sdl_joystick(StructButtons * auxButtons)
-{
-  button_select =  auxButtons->b_select;
-  button_start =  auxButtons->b_start;
-  button_right = auxButtons->b_right;
-  button_left =  auxButtons->b_left;
-  button_up = auxButtons->b_up;
-  button_down =  auxButtons->b_down;
-  button_a = auxButtons->b_a;
-  button_b = auxButtons->b_b;
-  return;  
-}
+//void jj_sdl_joystick(StructButtons * auxButtons)
+//{
+//  button_select =  auxButtons->b_select;
+//  button_start =  auxButtons->b_start;
+//  button_right = auxButtons->b_right;
+//  button_left =  auxButtons->b_left;
+//  button_up = auxButtons->b_up;
+//  button_down =  auxButtons->b_down;
+//  button_a = auxButtons->b_a;
+//  button_b = auxButtons->b_b;
+//  return;  
+//}
 
 byte sdl_get_buttons(void)
 {
@@ -259,9 +272,14 @@ void sdl_frame(void)
    default: SDL_Flip(); break;
   }
  }
- */
- //memcpy(gb_pixels_backup,pixels,23040);
- memset(pixels,0,23040);//Borra hasta 144 lineas //Tarda 26 micros  
+ */ 
+ #ifdef use_lib_vga_thread 
+  //memcpy((void *)gb_pixels_backup,pixels,23040);
+  memcpy((void *)gb_video_buffer_backup_gb,pixels,23040);
+  memset(pixels,0,23040);
+ #else
+  memset(pixels,0,23040);//Borra hasta 144 lineas //Tarda 26 micros  
+ #endif
 }
 
 
