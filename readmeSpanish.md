@@ -62,6 +62,19 @@ Se permiten las siguientes acciones desde el menú (tecla F1):
   <li>Activar y desactivar el sonido</li>  
   <li>Reinicio del emulador y del chip</li>  
  </ul>
+ Las teclas para jugar son:
+ <pre>
+  Teclado ESP32        Joystick GB
+  -----------------------------------
+   Arriba            - cursor arriba
+   Abajo             - cursor abajo
+   Izquierda         - cursor izquierda
+   Derecha           - cursor derecha
+   a                 - A
+   z                 - B
+   Barra espaciadora - Start
+   ENTER             - SELECT              
+ </pre><br>
  Se dispone de un OSD básico de bajos recursos, es decir, muy simple, que se visualiza pulsando la tecla <b>F1</b>.
  <center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/main/preview/previewOSD.gif'></center>
  Los ficheros deben ser convertidos a .h en hexadecimal. Puede usarse la herramienta online:<br>
