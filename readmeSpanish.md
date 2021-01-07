@@ -76,6 +76,7 @@ Se permiten las siguientes acciones desde el menú (tecla F1):
    ENTER             - SELECT              
  </pre><br>
  Se dispone de un OSD básico de bajos recursos, es decir, muy simple, que se visualiza pulsando la tecla <b>F1</b>.
+ Para movernos por el OSD, usamos los cursores, el <b>ENTER</b> para aceptar y el <b>ESC</b> para cancelar.
  <center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/main/preview/previewOSD.gif'></center>
  Los ficheros deben ser convertidos a .h en hexadecimal. Puede usarse la herramienta online:<br>
  <a href='http://tomeko.net/online_tools/file_to_hex.php?lang=en'>http://tomeko.net/online_tools/file_to_hex.php?lang=en</a>
