@@ -42,7 +42,7 @@ Está todo preparado para no tener que instalar las librerias de bitluni. Sin em
 <br>
 <h1>Arduino IDE</h1>
 Todo el proyecto es compatible con la estructura de Arduino 1.8.11.
-Tan sólo tenemos que abrir el <b>CPCem.ino</b> del directorio <b>CPCem</b>.
+Tan sólo tenemos que abrir el <b>gameboy.ino</b> del directorio <b>gameboy</b>.
 <center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/master/preview/previewArduinoIDEpreferences.gif'></center>
 Debemos instalar las extensiones de spressif en el gestor de urls adicionales de tarjetas <b>https://dl.espressif.com/dl/package_esp32_index.json</b>
 <center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/master/preview/previewArduinoIDElibrary.gif'></center>
