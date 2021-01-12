@@ -52,8 +52,12 @@
 #ifdef lib_compile_vga32
  //#include <ESP32Lib.h> //Para VGA32
  //#include <Ressources/Font6x8.h>//Para VGA32
- #include "MartianVGA.h" 
- #include "ESP32Lib/Ressources/Font6x8.h"//Para VGA32
+ #include "MartianVGA.h"
+ #ifdef use_lib_tinyFont
+  #include "gb_sdl_font6x8.h"
+ #else
+  #include "ESP32Lib/Ressources/Font6x8.h"//Para VGA32
+ #endif 
  #include "def/hardware.h"
 #endif
  
@@ -435,7 +439,10 @@ void setup()
      vga.init(vga.MODE320x175.custom(160,144), redPin, greenPin, bluePin, hsyncPin, vsyncPin); //Se ve bien
     #endif 
    #endif
-   vga.setFont(Font6x8);
+
+   #ifndef use_lib_tinyFont   
+    vga.setFont(Font6x8);
+   #endif 
    vga.clear(BLACK);
    ptrVGA = vga.backBuffer; //Puntero al buffer Video
    vga.clear(0); //Seccion VGA32

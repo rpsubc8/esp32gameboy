@@ -24,6 +24,9 @@
  //Modo hilos muy lento por ahora
  //#define use_lib_vga_thread
  
+ //No usa font bitluni, ahorra memoria
+ //#define use_lib_tinyFont
+
  //log serial usb
  #define use_lib_log_serial
 
