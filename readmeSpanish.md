@@ -104,6 +104,7 @@ El archivo <b>gbConfig.h</b> se seleccionan las opciones:
  <li><b>use_min_ram:</b> No usa ningún banco de cache, ahorrando memoria, pero siendo más lento.</li>
  <li><b>use_half_ram:</b> Usa 4 bancos de cache, ganando velocidad, sacrificando memoria.</li>
  <li><b>use_max_ram:</b> Usa 8 bancos de cache, ganando velocidad, sacrificando memoria.</li>
+ <li><b>use_lib_tinyFont:</b> Usa rutinas propias para dibujar fuente de 6x8 sin usar las de bitluni, ahorrando memoria RAM y Flash</li>
 </ul>
 
 
