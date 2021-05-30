@@ -1,11 +1,11 @@
 # ESP32 Gameboy
 
 <center><img src="https://github.com/rpsubc8/esp32gameboy/blob/master/preview/preview.gif"></center>
-Emulador de Gameboy (fork lualiliu) para la placa TTGO VGA32 con chip ESP32.
+Emulador de Gameboy (fork lualiliu) para la placa TTGO VGA32 v1.2 con chip ESP32.
 <ul> 
  <li>Uso de vga y teclado</li>
  <li>Hasta 8 bancos de cache</li>
- <li>No se usa PSRAM, funcionando en ESP32 de 520 KB de RAM (TTGO VGA32)</li>
+ <li>No se usa PSRAM, funcionando en ESP32 de 520 KB de RAM (TTGO VGA32 v1.2)</li>
  <li>Uso de un sólo core</li>
  <li>OSD de bajos recursos</li>
  <li>Creado proyecto compatible con Arduino IDE y Platform IO</li>
@@ -20,6 +20,7 @@ Emulador de Gameboy (fork lualiliu) para la placa TTGO VGA32 con chip ESP32.
 <h1>Requerimientos</h1>
 Se requiere:
  <ul>
+  <li>TTGO VGA32 v1.2</li>
   <li>Visual Studio 1.48.1 PLATFORMIO 2.2.0</li>
   <li>Arduino IDE 1.8.11</li>
   <li>Librería Arduino fabgl 0.9.0 (incluida en proyecto PLATFORMIO)</li>
