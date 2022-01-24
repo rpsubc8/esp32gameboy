@@ -1,6 +1,6 @@
 #ifndef LCD_H
 #define LCD_H
-#include <arduino.h>
+#include <Arduino.h>
 //int lcd_cycle(void);
 //JJ int lcd_get_line(void);
 
