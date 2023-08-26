@@ -1,5 +1,5 @@
 # ESP32 Gameboy emulator
-<center><img src='https://raw.githubusercontent.com/rpsubc8/esp32gameboy/main/preview/previewGameboyYoutube.gif'></center>
+<center><img src='https://github.com/rpsubc8/esp32gameboy/blob/master/preview/previewGameboyYoutube'></center>
 <ul>
  <li><b>Discord: </b><a href='https://discord.gg/rtyAbT5mgQ'>https://discord.gg/rtyAbT5mgQ</a></li>
  <li><b>Youtube: </b><a href='https://www.youtube.com/watch?v=F00ctuDlUbs'>https://www.youtube.com/watch?v=F00ctuDlUbs</a></li>
